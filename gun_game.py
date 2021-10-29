@@ -12,7 +12,7 @@ canv.pack(fill = tk.BOTH, expand = 1)
 # класс функций, задающих цели
 class Ball:
   def __init__(self, x = 40, y = 450):
-    # начальные координаты, скрости, ускорение, количество отражений от стен, цвет, размер, время жизни шаров
+    # начальные координаты, скрости, ускорение, количество отражений от стен, цвет, размер, время жизни пуль
     self.x = x
     self.y = y
     self.r = 10
@@ -52,6 +52,7 @@ class Ball:
     canv.coords(self.id, self.x, self.y, self.x + 2 * self.vx, self.y - 2 * self.vy)
 
   def move(self):
+    # проверяем, столкнулась ли пуля со стенами (если столкнулась, то сколько раз), ее отражение от стен и удаление, если количество столкновений превышает максимальное
     if self.x >= 800 - self.r or self.x <= self.r:
       self.vx = -self.vx
       self.bounce += 1
@@ -67,6 +68,7 @@ class Ball:
       self.vx = self.vy = self.ay = 0
     self.set_coords()
 
+# класс функций, задающих пушку
 class Gun:
   def __init__(self):
     self.f2_power = 10
@@ -75,6 +77,7 @@ class Gun:
     self.x = 20
     self.y = 450
     self.v = 3
+    # рисует пушку
     self.id_base = canv.create_rectangle(self.x - 20, self.y + 20, self.x + 20, self.y, fill = 'green')
     self.id = canv.create_line(20, 450, self.x + 30, self.x - 30, width = 7, fill = 'red')
 
@@ -105,6 +108,7 @@ class Gun:
     canv.coords(self.id, self.x, self.y, self.x + max(self.f2_power, 20) * math.cos(self.an), self.y + max(self.f2_power, 20) * math.sin(self.an))
 
   def power_up(self):
+  # изменение цвета пушки во время выстрела
     if self.f2_on:
       if self.f2_power < 100:
         self.f2_power += 1
@@ -117,15 +121,18 @@ class Gun:
     canv.coords(self.id, self.x, self.y, self.x + max(self.f2_power, 20) * math.cos(self.an), self.y + max(self.f2_power, 20) * math.sin(self.an))
 
   def move_left(self, event = 0):
+  # движение пушки влево
     if event:
       self.x -= self.v
       self.set_coords()
 
   def move_right(self, event = 0):
+  # движение пушки вправо
     if event:
       self.x += self.v
       self.set_coords()
 
+# класс функций задающих цель
 class Target:
   def __init__(self):
     self.points = 0
@@ -179,6 +186,7 @@ def new_game(event = ''):
   t1.new_target()
   bullet = 0
   balls = []
+  # связываем написанные функции с клавишами (кнопками мыши)
   canv.bind('<Button-1>', g1.fire2_start)
   canv.bind('<ButtonRelease-1>', g1.fire2_end)
   canv.bind('<Motion>', g1.aiming)
