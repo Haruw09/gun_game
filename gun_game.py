@@ -47,18 +47,19 @@ class Ball:
     # проверяет столкнулся ли мяч со стеной
     if ((self.x - obj.x)**2 + (self.y - obj.y)**2) < (self.r + obj.r) ** 2:
       return True
-    else: return False
+    else: 
+      return False
 
   def move(self):
-    # проверяем, столкнулась ли пуля со стенами
+    # отражение от стен
     if self.x >= 800 - self.r or self.x <= self.r:
       self.vx = -self.vx
     if self.y >= 600 - self.r or self.y <= self.r:
       self.vy = -self.vy
+    # движение пули
     self.x += self.vx
     self.y -= self.vy
     self.vy -= self.ay
-    self.vx = round(self.vx*(1 + 0.1*rnd(-3, 4)))
     if self.live < 0:
       balls.pop(balls.index(self))
       canv.delete(self.id)
@@ -143,7 +144,7 @@ class Target:
 
   def new_target(self):
     # создание новой цели
-    x = self.x = rnd(600, 780)
+    x = self.x = rnd(600, 750)
     y = self.y = rnd(300, 550)
     r = self.r = rnd(2, 50)
     color = self.color = 'red'
