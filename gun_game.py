@@ -24,6 +24,7 @@ class Ball:
     self.live = 100
 
   def set_coords(self):
+    # устанавливает координаты пули
     canv.coords(self.id, self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r)
 
   def move(self):
@@ -47,9 +48,6 @@ class Ball:
     if ((self.x - obj.x)**2 + (self.y - obj.y)**2) < (self.r + obj.r) ** 2:
       return True
     else: return False
-
-  def set_coords(self):
-    canv.coords(self.id, self.x, self.y, self.x + 2 * self.vx, self.y - 2 * self.vy)
 
   def move(self):
     # проверяем, столкнулась ли пуля со стенами
