@@ -9,63 +9,63 @@ root.geometry('800x600')
 canv = tk.Canvas(root, bg = 'white')
 canv.pack(fill = tk.BOTH, expand = 1)
 
-# класс функций, задающих цели
+# класс функций, задающих пули
 class Ball:
   def __init__(self, x = 40, y = 450):
-    # начальные координаты, скрости, ускорение, количество отражений от стен, цвет, размер, время жизни пуль
+    # начальные координаты, скрости, ускорение, цвет, размер, время жизни пуль
     self.x = x
     self.y = y
     self.r = 10
     self.vx = 0
     self.vy = 0
     self.ay = 2
-    self.bounce = 0
     self.color = choice(['blue', 'green', 'red', 'brown'])
     self.id = canv.create_oval(self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r, fill = self.color)
-    self.live = 30
+    self.live = 100
 
   def set_coords(self):
     canv.coords(self.id, self.x - self.r, self.y - self.r, self.x + self.r, self.y + self.r)
 
   def move(self):
-    # перемещает шар  с учетом скоростей vx и vy, силы тяжести и стен по краям окна (после нескольких отражений от стен убирает мяч)
+    # перемещает шар  с учетом скоростей vx и vy, силы тяжести и стен по краям окна
     if self.x >= 800 - self.r or self.x <= self.r:
       self.vx = -self.vx
-      self.bounce += 1
     if self.y >= 600 - self.r or self.y <= self.r:
       self.vy = -self.vy
-      self.bounce += 1
     self.x += self.vx
     self.y -= self.vy
     self.vy -= self.ay
-    if self.bounce >= 3:
-      self.kill
+    if self.live < 0:
+      balls.pop(balls.index(self))
+      canv.delete(self.id)
+    else:
+      self.live -= 1
     self.set_coords()
 
   def collision(self, obj):
     # проверяет столкнулся ли мяч со стеной
     if ((self.x - obj.x)**2 + (self.y - obj.y)**2) < (self.r + obj.r) ** 2:
       return True
-    return False
+    else: return False
 
   def set_coords(self):
     canv.coords(self.id, self.x, self.y, self.x + 2 * self.vx, self.y - 2 * self.vy)
 
   def move(self):
-    # проверяем, столкнулась ли пуля со стенами (если столкнулась, то сколько раз), ее отражение от стен и удаление, если количество столкновений превышает максимальное
+    # проверяем, столкнулась ли пуля со стенами
     if self.x >= 800 - self.r or self.x <= self.r:
       self.vx = -self.vx
-      self.bounce += 1
     if self.y >= 600 - self.r or self.y <= self.r:
       self.vy = -self.vy
-      self.bounce += 1
     self.x += self.vx
     self.y -= self.vy
     self.vy -= self.ay
     self.vx = round(self.vx*(1 + 0.1*rnd(-3, 4)))
-    if self.bounce >= 3:
-      kill.self
-      self.vx = self.vy = self.ay = 0
+    if self.live < 0:
+      balls.pop(balls.index(self))
+      canv.delete(self.id)
+    else:
+      self.live -= 1
     self.set_coords()
 
 # класс функций, задающих пушку
